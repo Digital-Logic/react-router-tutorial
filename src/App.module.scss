@@ -1,0 +1,15 @@
+.app {
+
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  a {
+    font-size: 20px;
+
+    &:global(.active) {
+      color: hotpink;
+    }
+  }
+}
