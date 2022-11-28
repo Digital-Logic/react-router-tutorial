@@ -1,8 +1,7 @@
 import Loader from "components/Loader";
 import styles from "./Products.module.scss";
-import fakeApi from "fakeApi";
-import { Suspense, useState } from "react";
-import { Await, Link, useAsyncValue, useLoaderData } from "react-router-dom";
+import { Suspense, useEffect, useRef } from "react";
+import { Await, Form, Link, useAsyncValue, useLoaderData, useNavigation, useSubmit } from "react-router-dom";
 
 function Products() {
 
@@ -15,11 +14,43 @@ function Products() {
 			.then(() => setIsLoading(false));
 	}, []);*/
 
-	const { products } = useLoaderData();
+	const { products, filter } = useLoaderData();
+	const navigation = useNavigation();
+	const submit = useSubmit();
+	const filterRef = useRef();
+	const isSearching = navigation.location &&
+		new URLSearchParams(navigation.location.search).has("filter");
+
+
+	const handleFilter = e => {
+		submit(e.currentTarget.form,{
+			replace: Boolean(filter)
+		});
+	};
+
+	useEffect(() => {
+		filterRef.current.value = filter;
+	}, [filter]);
+
 
 	return (
 		<div>
+			<div className={styles.header}>
 			<h2>Products</h2>
+			<Link to="new-product">New Product</Link>
+			</div>
+			<Form>
+				<input
+					name="filter"
+					autoComplete="off"
+					ref={filterRef}
+					placeholder="filter"
+					onChange={handleFilter}
+					/>
+			</Form>
+			{
+				isSearching && <p>Filtering Products...</p>
+			}
 			<div className={styles.store}>
 
 				<Suspense fallback={<Loader />}>

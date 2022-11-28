@@ -4,10 +4,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import {
-	BrowserRouter,
 	createBrowserRouter,
 	createRoutesFromElements,
-	defer,
+	defer, redirect,
 	Route,
 	RouterProvider
 } from "react-router-dom";
@@ -15,6 +14,7 @@ import About from "routes/About";
 import Contact from "routes/Contact";
 import ErrorRoute from "routes/ErrorRoute";
 import Home from "routes/Home";
+import NewProduct from "routes/NewProduct";
 import Product from "routes/Product";
 import Products from "routes/Products";
 import App from "./App";
@@ -28,12 +28,25 @@ const router = createBrowserRouter(createRoutesFromElements(
 		<Route index element={<Home/>}/>
 		<Route path="products" element={<ProductLayout/>}>
 			<Route index element={<Products/>}
-			       loader={() => defer({ products: fakeApi.getProducts() })}/>
+			       loader={({request}) => {
+							 const url = new URL(request.url);
+							 const filter = (new URLSearchParams(url.search).get("filter") || "").toLocaleLowerCase();
+							 return defer({
+								 products: fakeApi.getProducts(filter),
+								 filter
+							 });
+						 }}/>
 			<Route path=":slug" element={<Product/>}
 			       loader={({ request, params }) =>
 				       defer({
 					       product: fakeApi.getProduct(params.slug)
 				       })
+			       }/>
+			<Route path="new-product" element={<NewProduct/>}
+			       action={({ request }) => request.formData()
+				       .then(Object.fromEntries)
+				       .then(fakeApi.createProduct)
+				       .then(() => redirect("../"))
 			       }/>
 		</Route>
 		<Route element={<SharedLayout/>}>

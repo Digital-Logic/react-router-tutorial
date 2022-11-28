@@ -1,18 +1,13 @@
 import styles from "App.module.scss";
 import Loader from "components/Loader";
-import ProductLayout from "components/ProductLayout";
-import SharedLayout from "components/SharedLayout";
-import { NavLink, Outlet, Route, Routes, useNavigation } from "react-router-dom";
-import About from "routes/About";
-import Contact from "routes/Contact";
-import ErrorRoute from "routes/ErrorRoute";
-import Home from "routes/Home";
-import Product from "routes/Product";
-import Products from "routes/Products";
+import { NavLink, Outlet, useNavigation } from "react-router-dom";
+
 
 function App () {
 
 	const navigation = useNavigation();
+	const isLoading = navigation.state === "loading" &&
+		!(navigation.location && navigation.location.search);
 
 	return (
 		<div className={styles.app}>
@@ -24,7 +19,7 @@ function App () {
 				<NavLink to="contact">Contact</NavLink>
 			</nav>
 
-			{ navigation.state === "loading" && <Loader /> }
+			{ isLoading && <Loader /> }
 
 			<Outlet />
 {/*			<Routes>

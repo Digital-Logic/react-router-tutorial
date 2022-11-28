@@ -10,8 +10,9 @@ const KEY = "products";
 
 
 const fakeApi = {
-	getProducts: () => delay((resolve, reject) => {
+	getProducts: (filter) => delay((resolve, reject) => {
 		localforage.getItem(KEY)
+			.then(products => products.filter(p => p.name.toLowerCase().includes(filter)))
 			.then(resolve);
 	}),
 	getProduct: slug => delay(async (resolve, reject) => {
@@ -23,9 +24,18 @@ const fakeApi = {
 			message: `No product with id: ${slug} found.`
 		});
 	}),
+	createProduct: product => delay(async (resolve, reject) => {
+		product.id = faker.datatype.uuid();
+		product.slug = genSlug(product.name);
+
+		const products = await localforage.getItem(KEY);
+		products.push(product);
+		await localforage.setItem(KEY, products);
+		resolve(product);
+	}),
 };
 
-function delay(func, time=3000) {
+function delay(func, time= 1000) {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => func(resolve, reject), Math.random() * time);
 	});
@@ -41,7 +51,7 @@ async function genStore() {
 	const products = await localforage.getItem(KEY);
 
 	if (!products)
-		await localforage.setItem(KEY, genProducts(6));
+		await localforage.setItem(KEY, genProducts(100));
 }
 
 function genProducts(size) {
@@ -59,7 +69,7 @@ function genProduct() {
 		slug: genSlug(name),
 		description: faker.commerce.productDescription(),
 		price: faker.commerce.price(),
-		quantity: Math.floor(Math.random()),
+		quantity: Math.floor(Math.random() * 100),
 		id: faker.datatype.uuid()
 	};
 }
