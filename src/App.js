@@ -1,7 +1,7 @@
 import styles from "App.module.scss";
 import ProductLayout from "components/ProductLayout";
 import SharedLayout from "components/SharedLayout";
-import { NavLink, Route, Routes } from "react-router-dom";
+import { NavLink, Outlet, Route, Routes } from "react-router-dom";
 import About from "routes/About";
 import Contact from "routes/Contact";
 import ErrorRoute from "routes/ErrorRoute";
@@ -20,7 +20,8 @@ function App () {
 				<NavLink to="contact">Contact</NavLink>
 			</nav>
 
-			<Routes>
+			<Outlet />
+{/*			<Routes>
 				<Route path="/" element={<Home/>}/>
 				<Route path="products" element={<ProductLayout/>}>
 					<Route index element={<Products/>}/>
@@ -31,7 +32,7 @@ function App () {
 					<Route path="contact" element={<Contact/>}/>
 				</Route>
 				<Route path="*" element={<ErrorRoute/>}/>
-			</Routes>
+			</Routes>*/}
 
 		</div>
 	);

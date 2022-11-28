@@ -1,0 +1,41 @@
+
+.store {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.product {
+  display: inline-block;
+  width: 250px;
+  border: 1px solid gray;
+  border-radius: 10px;
+  color: white;
+  padding: 20px;
+  background: #282c34;
+  transition-duration: 200ms;
+
+  &:hover {
+    background: #1a1c21;
+  }
+
+  h2 {
+    margin: 0;
+  }
+
+  p {
+    text-align: left;
+  }
+}
+
+.description {
+  height: 55px;
+  overflow: clip;
+  margin-bottom: 0;
+
+  span {
+    color: #9b9b9b;
+    font-size: 14px;
+  }
+}
