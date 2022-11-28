@@ -2,26 +2,26 @@ import Loader from "components/Loader";
 import styles from "./Products.module.scss";
 import fakeApi from "fakeApi";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 
 function Products() {
 
-	const [products, setProducts] = useState([]);
+/*	const [products, setProducts] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		fakeApi.getProducts()
 			.then(setProducts)
 			.then(() => setIsLoading(false));
-	}, []);
+	}, []);*/
+
+	const products = useLoaderData();
 
 	return (
 		<div>
 			<h2>Products</h2>
 			<div className={styles.store}>
 				{
-					isLoading ?
-						<Loader /> :
 					products.map(product =>
 						<ProductThumbnail
 							name={product.name}

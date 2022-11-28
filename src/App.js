@@ -1,7 +1,8 @@
 import styles from "App.module.scss";
+import Loader from "components/Loader";
 import ProductLayout from "components/ProductLayout";
 import SharedLayout from "components/SharedLayout";
-import { NavLink, Outlet, Route, Routes } from "react-router-dom";
+import { NavLink, Outlet, Route, Routes, useNavigation } from "react-router-dom";
 import About from "routes/About";
 import Contact from "routes/Contact";
 import ErrorRoute from "routes/ErrorRoute";
@@ -10,6 +11,9 @@ import Product from "routes/Product";
 import Products from "routes/Products";
 
 function App () {
+
+	const navigation = useNavigation();
+
 	return (
 		<div className={styles.app}>
 
@@ -19,6 +23,8 @@ function App () {
 				<NavLink to="about">About</NavLink>
 				<NavLink to="contact">Contact</NavLink>
 			</nav>
+
+			{ navigation.state === "loading" && <Loader /> }
 
 			<Outlet />
 {/*			<Routes>

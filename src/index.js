@@ -6,6 +6,7 @@ import "./index.css";
 import { BrowserRouter, createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
 import About from "routes/About";
 import Contact from "routes/Contact";
+import ErrorRoute from "routes/ErrorRoute";
 import Home from "routes/Home";
 import Product from "routes/Product";
 import Products from "routes/Products";
@@ -16,11 +17,14 @@ import fakeApi from "fakeApi";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const router = createBrowserRouter(createRoutesFromElements(
-	<Route path="/" element={<App />}>
+	<Route path="/" element={<App />} errorElement={<ErrorRoute />}>
 		<Route index element={<Home />} />
 		<Route path="products" element={<ProductLayout />}>
-			<Route index element={<Products />}/>
-			<Route path=":slug" element={<Product />} />
+			<Route index element={<Products />}
+				loader={fakeApi.getProducts}/>
+			<Route path=":slug" element={<Product />}
+				loader={({ request, params }) =>
+					fakeApi.getProduct(params.slug)}/>
 		</Route>
 		<Route element={<SharedLayout />}>
 			<Route path="contact" element={<Contact />}/>

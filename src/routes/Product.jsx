@@ -1,13 +1,15 @@
-import { useParams } from "react-router-dom";
+import { useLoaderData, useParams } from "react-router-dom";
 
 function Product() {
 
-	const params = useParams();
+	const product = useLoaderData();
 
 	return (
 		<div>
-			<h2>Product</h2>
-			<p>Product type: {params.slug}</p>
+			<h2>{product.name}</h2>
+			<p>Price: {product.price}</p>
+			<p>Quantity: {product.quantity}</p>
+			<p><span>Description: </span>{product.description}</p>
 		</div>
 	);
 }
