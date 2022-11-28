@@ -1,8 +1,8 @@
 import Loader from "components/Loader";
 import styles from "./Products.module.scss";
 import fakeApi from "fakeApi";
-import { useEffect, useState } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { Suspense, useState } from "react";
+import { Await, Link, useAsyncValue, useLoaderData } from "react-router-dom";
 
 function Products() {
 
@@ -15,25 +15,35 @@ function Products() {
 			.then(() => setIsLoading(false));
 	}, []);*/
 
-	const products = useLoaderData();
+	const { products } = useLoaderData();
 
 	return (
 		<div>
 			<h2>Products</h2>
 			<div className={styles.store}>
-				{
-					products.map(product =>
-						<ProductThumbnail
-							name={product.name}
-							description={product.description}
-							price={product.price}
-							slug={product.slug}
-							key={product.id}
-						/>)
-				}
+
+				<Suspense fallback={<Loader />}>
+					<Await resolve={products}>
+						<ProductLoader />
+					</Await>
+				</Suspense>
 			</div>
 		</div>
 	);
+}
+
+function ProductLoader() {
+
+	const products = useAsyncValue();
+
+	return products.map(product =>
+		<ProductThumbnail
+			name={product.name}
+			description={product.description}
+			price={product.price}
+			slug={product.slug}
+			key={product.id}
+		/>);
 }
 
 
